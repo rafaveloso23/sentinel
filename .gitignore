@@ -1,1 +1,6 @@
 .sentinel/policies/manifest.json
+wks-teste/.terraform/environment
+wks-teste/.terraform.lock.hcl
+wks-teste/.terraform/terraform.tfstate
+wks-teste/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.50.0/linux_amd64/LICENSE.txt
+wks-teste/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.50.0/linux_amd64/terraform-provider-azurerm_v4.50.0_x5
