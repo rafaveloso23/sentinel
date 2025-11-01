@@ -1,3 +1,4 @@
+
 import "tfconfig/v2" as tfconfig
 import "tfrun"
 import "strings"
@@ -140,24 +141,8 @@ if length(violatingModuleCalls) > 0 and not tfrun.is_destroy and not is_exempt {
 # Validação final
 validated = tfrun.is_destroy or length(violatingModuleCalls) is 0 or is_exempt
 
-# =============================================================================
-# MAIN RULE
-# =============================================================================
-
-# --------------------------------------------------------
-# Name:        enforce-no-modules
-# Category:    Code Standards & Best Practices
-# Provider:    All providers
-# Resource:    All modules (public and private registry)
-# Check:       Ensures no module blocks exist in root module
-#              Validates module_address is empty string
-# --------------------------------------------------------
-# This policy blocks ALL Terraform module usage to enforce
-# inline resource definitions for better visibility and
-# reduced external dependencies.
-# 
-# Exemptions available via workspace/project parameters.
-# --------------------------------------------------------
+// Ensure no Terraform modules are used in root
+// module.
 main = rule {
   validated is true
 }
