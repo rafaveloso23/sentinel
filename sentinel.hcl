@@ -24,9 +24,7 @@ policy "enforce-no-modules" {
     # Lista de workspaces ISENTOS da policy
     # Adicione workspaces que PODEM usar módulos
     exempt_workspaces = [
-      # "workspace-lab",
-      # "workspace-experiments",
-      # "dev-testing"
+      "teste-wks-rvs-sentinel"
     ]
     # Lista de projetos ISENTOS da policy
     # Adicione projetos completos que PODEM usar módulos
