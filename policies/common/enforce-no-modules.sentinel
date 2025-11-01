@@ -1,3 +1,4 @@
+
 import "tfconfig/v2" as tfconfig
 import "tfrun"
 import "strings"
@@ -61,6 +62,7 @@ print_violation_header = func() {
   print("🚫 POLICY VIOLATION: Module Usage Not Allowed")
   print("================================================================================")
   print("")
+  return true
 }
 
 print_violation_details = func() {
@@ -77,6 +79,8 @@ print_violation_details = func() {
     print("     Location: Root module")
     print("")
   }
+  
+  return true
 }
 
 print_remediation_steps = func() {
@@ -102,6 +106,8 @@ print_remediation_steps = func() {
   print("   🎫 Ticket System: https://tickets.yourcompany.com")
   print("")
   print("================================================================================")
+  
+  return true
 }
 
 # =============================================================================
@@ -135,8 +141,10 @@ if length(violatingModuleCalls) > 0 and not tfrun.is_destroy and not is_exempt {
 # Validação final
 validated = tfrun.is_destroy or length(violatingModuleCalls) is 0 or is_exempt
 
+# =============================================================================
+# MAIN RULE
+# =============================================================================
 
-# Garanta que o workspace não possua modulos no root, a menos que esteja isento
 main = rule {
   validated is true
 }
