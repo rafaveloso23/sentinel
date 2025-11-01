@@ -57,9 +57,9 @@ violatingModuleCalls = filter tfconfig.module_calls as index, moduleCall {
 # =============================================================================
 
 print_violation_header = func() {
-  print("=" * 80)
+  print("================================================================================")
   print("🚫 POLICY VIOLATION: Module Usage Not Allowed")
-  print("=" * 80)
+  print("================================================================================")
   print("")
 }
 
@@ -80,17 +80,17 @@ print_violation_details = func() {
 }
 
 print_remediation_steps = func() {
-  print("=" * 80)
+  print("================================================================================")
   print("✅ HOW TO RESOLVE:")
-  print("=" * 80)
+  print("================================================================================")
   print("")
   print("   1. Remove all 'module' blocks from your root Terraform configuration")
   print("   2. Inline the resources directly in your .tf files")
   print("   3. If you need reusable code, use local Terraform files instead")
   print("")
-  print("=" * 80)
+  print("================================================================================")
   print("🆘 NEED AN EXCEPTION?")
-  print("=" * 80)
+  print("================================================================================")
   print("")
   print("   If your workspace requires module usage for a valid business case:")
   print("")
@@ -101,7 +101,7 @@ print_remediation_steps = func() {
   print("   📧 Contact: platform-team@yourcompany.com")
   print("   🎫 Ticket System: https://tickets.yourcompany.com")
   print("")
-  print("=" * 80)
+  print("================================================================================")
 }
 
 # =============================================================================
@@ -135,7 +135,8 @@ if length(violatingModuleCalls) > 0 and not tfrun.is_destroy and not is_exempt {
 # Validação final
 validated = tfrun.is_destroy or length(violatingModuleCalls) is 0 or is_exempt
 
-//Garanta que não há módulos sendo usados no root module
+
+# Garanta que o workspace não possua modulos no root, a menos que esteja isento
 main = rule {
   validated is true
 }
