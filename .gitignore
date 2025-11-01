@@ -1,4 +1,5 @@
 .sentinel/policies/manifest.json
+.sentinel/**
 wks-teste/.terraform/environment
 wks-teste/.terraform.lock.hcl
 wks-teste/.terraform/terraform.tfstate

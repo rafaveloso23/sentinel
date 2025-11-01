@@ -1,0 +1,144 @@
+import "tfconfig/v2" as tfconfig
+import "tfrun"
+import "strings"
+
+# =============================================================================
+# PARAMETERS
+# =============================================================================
+
+# Lista de workspaces que estão ISENTOS desta policy
+# Exemplo: ["workspace-lab", "workspace-dev-experiments"]
+param exempt_workspaces default []
+
+# Lista de projetos que estão ISENTOS desta policy
+# Exemplo: ["project-sandbox", "project-testing"]
+param exempt_projects default []
+
+# =============================================================================
+# HELPER FUNCTIONS
+# =============================================================================
+
+# Verifica se o workspace atual está na lista de exceções
+is_workspace_exempt = func() {
+  workspace_name = tfrun.workspace.name
+  
+  return any exempt_workspaces as exempt {
+    exempt is workspace_name
+  }
+}
+
+# Verifica se o projeto atual está na lista de exceções
+is_project_exempt = func() {
+  # O projeto vem como parte do workspace no tfrun
+  # Formato: tfrun.project.name (disponível em versões recentes)
+  if "project" in keys(tfrun) and "name" in keys(tfrun.project) {
+    project_name = tfrun.project.name
+    
+    return any exempt_projects as exempt {
+      exempt is project_name
+    }
+  }
+  
+  return false
+}
+
+# =============================================================================
+# VALIDATION LOGIC
+# =============================================================================
+
+# Filtra TODOS os módulos chamados do root module (nível raiz)
+violatingModuleCalls = filter tfconfig.module_calls as index, moduleCall {
+  # Apenas módulos chamados diretamente do root module
+  moduleCall.module_address is ""
+}
+
+# =============================================================================
+# ERROR MESSAGES
+# =============================================================================
+
+print_violation_header = func() {
+  print("=" * 80)
+  print("🚫 POLICY VIOLATION: Module Usage Not Allowed")
+  print("=" * 80)
+  print("")
+}
+
+print_violation_details = func() {
+  print("📋 POLICY RULE:")
+  print("   This organization does NOT allow the use of Terraform modules")
+  print("   (neither public nor private registry modules).")
+  print("")
+  print("❌ VIOLATIONS FOUND:")
+  print("")
+  
+  for violatingModuleCalls as address, moduleCall {
+    print("   • Module Name:", moduleCall.name)
+    print("     Source:", moduleCall.source)
+    print("     Location: Root module")
+    print("")
+  }
+}
+
+print_remediation_steps = func() {
+  print("=" * 80)
+  print("✅ HOW TO RESOLVE:")
+  print("=" * 80)
+  print("")
+  print("   1. Remove all 'module' blocks from your root Terraform configuration")
+  print("   2. Inline the resources directly in your .tf files")
+  print("   3. If you need reusable code, use local Terraform files instead")
+  print("")
+  print("=" * 80)
+  print("🆘 NEED AN EXCEPTION?")
+  print("=" * 80)
+  print("")
+  print("   If your workspace requires module usage for a valid business case:")
+  print("")
+  print("   1. Open a ticket with the Platform/DevOps team")
+  print("   2. Provide business justification")
+  print("   3. Request workspace/project exemption")
+  print("")
+  print("   📧 Contact: platform-team@yourcompany.com")
+  print("   🎫 Ticket System: https://tickets.yourcompany.com")
+  print("")
+  print("=" * 80)
+}
+
+# =============================================================================
+# EXEMPTION LOGIC
+# =============================================================================
+
+# Verifica se há alguma exceção aplicável
+is_exempt = is_workspace_exempt() or is_project_exempt()
+
+# Se houver exceção, logar e passar
+if is_exempt {
+  if is_workspace_exempt() {
+    print("✅ EXEMPTION GRANTED: Workspace '" + tfrun.workspace.name + "' is exempt from module restrictions")
+  }
+  if is_project_exempt() {
+    print("✅ EXEMPTION GRANTED: Project '" + tfrun.project.name + "' is exempt from module restrictions")
+  }
+}
+
+# =============================================================================
+# MAIN VALIDATION
+# =============================================================================
+
+# Se há violações E não é destroy E não há exceção
+if length(violatingModuleCalls) > 0 and not tfrun.is_destroy and not is_exempt {
+  print_violation_header()
+  print_violation_details()
+  print_remediation_steps()
+}
+
+# Validação final
+validated = tfrun.is_destroy or length(violatingModuleCalls) is 0 or is_exempt
+
+# =============================================================================
+# MAIN RULE
+# =============================================================================
+
+main = rule {
+  validated is true
+}
