@@ -138,7 +138,7 @@ validated = tfrun.is_destroy or length(violatingModuleCalls) is 0 or is_exempt
 # =============================================================================
 # MAIN RULE
 # =============================================================================
-
+//Garanta que não há módulos sendo usados no root module
 main = rule {
   validated is true
 }
