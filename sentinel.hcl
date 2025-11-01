@@ -20,7 +20,6 @@ policy "queue-logging-is-enabled" {
 policy "enforce-no-modules" {
   source            = "./policies/common/enforce-no-modules.sentinel"
   enforcement_level = "hard-mandatory"  # Bloqueia o apply se violar
-  description = "Ensures no Terraform modules (public or private) are used in root module. Exceptions can be granted per workspace/project."
   params = {
     # Lista de workspaces ISENTOS da policy
     # Adicione workspaces que PODEM usar módulos
