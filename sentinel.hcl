@@ -12,7 +12,7 @@ policy "enforce-no-modules" {
     # Lista de projetos ISENTOS da policy
     # Adicione projetos completos que PODEM usar módulos
     exempt_projects = [
-      "rf-sandbox-tfc"
+      #"rf-sandbox-tfc"
     ]
   }
 }
