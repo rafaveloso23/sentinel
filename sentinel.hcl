@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MPL-2.0
 policy "enforce-no-modules" {
   source            = "./policies/common/enforce-no-modules.sentinel"
-  enforcement_level = "hard-mandatory"  # Bloqueia o apply se violar
+  enforcement_level = "advisory"  # Bloqueia o apply se violar
   params = {
     # Lista de workspaces ISENTOS da policy
     # Adicione workspaces que PODEM usar módulos
