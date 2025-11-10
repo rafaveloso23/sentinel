@@ -13,3 +13,8 @@ teste-wks-rvs/.terraform/modules/modules.json
 teste-wks-rvs/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.51.0/linux_amd64/LICENSE.txt
 teste-wks-rvs/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.51.0/linux_amd64/terraform-provider-azurerm_v4.51.0_x5
 teste-wks-rvs/module-rf/main.tf
+teste-new-wks/.terraform.lock.hcl
+teste-new-wks/.terraform/environment
+teste-new-wks/.terraform/terraform.tfstate
+teste-new-wks/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.52.0/linux_amd64/LICENSE.txt
+teste-new-wks/.terraform/providers/registry.terraform.io/hashicorp/azurerm/4.52.0/linux_amd64/terraform-provider-azurerm_v4.52.0_x5
